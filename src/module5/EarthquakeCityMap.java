@@ -146,6 +146,13 @@ public class EarthquakeCityMap extends PApplet {
 	private void selectMarkerIfHover(List<Marker> markers)
 	{
 		// TODO: Implement this method
+		for (Marker marker: markers){
+			if(marker.isInside(map, mouseX, mouseY)){
+				lastSelected = (CommonMarker) marker;
+				lastSelected.setSelected(true);
+				break;
+			}
+		}
 	}
 	
 	/** The event handler for mouse clicks
@@ -153,14 +160,83 @@ public class EarthquakeCityMap extends PApplet {
 	 * Or if a city is clicked, it will display all the earthquakes 
 	 * where the city is in the threat circle
 	 */
+
 	@Override
-	public void mouseClicked()
-	{
+	public void mouseClicked() {
 		// TODO: Implement this method
 		// Hint: You probably want a helper method or two to keep this code
 		// from getting too long/disorganized
+		if (lastClicked != null) {
+			lastClicked.setClicked(false);
+			lastClicked = null;
+			unhideMarkers();
+		}
+		else{
+			if (clickMarkerIfClicked(quakeMarkers)==true) {
+				for (Marker qMarker: quakeMarkers){
+					if (qMarker.isInside(map,mouseX, mouseY)) {
+						qMarker.setHidden(false);
+					}
+					else{
+						qMarker.setHidden(true);
+					}
+					for (Marker cMarker: cityMarkers){
+						if (isSafe(qMarker,cMarker)==true){
+							cMarker.setHidden(false);
+						}
+						else{
+							cMarker.setHidden(true);
+						}
+
+					}
+
+				}
+			}
+			if (clickMarkerIfClicked(cityMarkers)==true) {
+				for (Marker cMarker: cityMarkers){
+					if (cMarker.isInside(map,mouseX, mouseY)) {
+						cMarker.setHidden(false);
+					}
+					else{
+						cMarker.setHidden(true);
+					}
+					for (Marker qMarker: quakeMarkers){
+						if (isSafe(qMarker,cMarker)==true){
+							qMarker.setHidden(false);
+						}
+						else{
+							qMarker.setHidden(true);
+						}
+
+					}
+
+				}
+			}
+
+		}
+
+
 	}
-	
+
+	private boolean clickMarkerIfClicked(List<Marker> markers){
+		for (Marker marker: markers){
+			if (marker.isInside(map,mouseX, mouseY)){
+				lastClicked = (CommonMarker) marker;
+				lastClicked.setClicked(true);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isSafe(Marker marker1, Marker marker2){
+		EarthquakeMarker q = (EarthquakeMarker) marker1;
+		Location l = marker1.getLocation();
+		if ((marker2.getDistanceTo(l))<q.threatCircle()){
+			return true;
+		}
+		return false;
+	}
 	
 	// loop over and unhide all markers
 	private void unhideMarkers() {

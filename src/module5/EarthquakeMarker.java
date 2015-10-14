@@ -1,6 +1,7 @@
 package module5;
 
 import de.fhpotsdam.unfolding.data.PointFeature;
+import de.fhpotsdam.unfolding.marker.Marker;
 import processing.core.PGraphics;
 
 /** Implements a visual marker for earthquakes on an earthquake map
@@ -94,7 +95,11 @@ public abstract class EarthquakeMarker extends CommonMarker
 	public void showTitle(PGraphics pg, float x, float y)
 	{
 		// TODO: Implement this method
-		
+		pg.fill(254,252,239);
+		pg.rect(x,y + 2*getRadius(),pg.textWidth(getTitle())+4,16);
+		pg.fill(0,0,0);
+		pg.textSize(12);
+		pg.text(getTitle(),x+2,y + 2*getRadius()+12);
 	}
 
 	
@@ -105,6 +110,7 @@ public abstract class EarthquakeMarker extends CommonMarker
 	 *  only and is not intended to be used for safety-critical 
 	 *  or predictive applications.
 	 */
+
 	public double threatCircle() {	
 		double miles = 20.0f * Math.pow(1.8, 2*getMagnitude()-5);
 		double km = (miles * kmPerMile);
