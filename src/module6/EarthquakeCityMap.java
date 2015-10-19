@@ -1,6 +1,7 @@
 package module6;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -81,7 +82,7 @@ public class EarthquakeCityMap extends PApplet {
 		// FOR TESTING: Set earthquakesURL to be one of the testing files by uncommenting
 		// one of the lines below.  This will work whether you are online or offline
 		//earthquakesURL = "test1.atom";
-		//earthquakesURL = "test2.atom";
+		earthquakesURL = "test2.atom";
 		
 		// Uncomment this line to take the quiz
 		//earthquakesURL = "quiz2.atom";
@@ -116,6 +117,8 @@ public class EarthquakeCityMap extends PApplet {
 
 	    // could be used for debugging
 	    printQuakes();
+		sortAndPrint(5);
+		sortAndPrint(20);
 	 		
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
@@ -138,6 +141,19 @@ public class EarthquakeCityMap extends PApplet {
 	// TODO: Add the method:
 	//   private void sortAndPrint(int numToPrint)
 	// and then call that method from setUp
+	private void sortAndPrint(int numToPrint){
+		ArrayList<EarthquakeMarker> earthquakeMarkers = new ArrayList<>();
+		for (Marker marker:quakeMarkers){
+			earthquakeMarkers.add((EarthquakeMarker)marker);
+		}
+		//Collections.sort(earthquakeMarkers);
+		Collections.sort(earthquakeMarkers,Collections.reverseOrder());
+		for (int i=0; i < numToPrint; i++){
+			System.out.println(earthquakeMarkers.get(i).getTitle());
+		}
+
+
+	}
 	
 	/** Event handler that gets called automatically when the 
 	 * mouse moves.
