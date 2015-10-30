@@ -149,7 +149,7 @@ public class ParseFeed {
 			
 			// split row by commas not in quotations
 			String[] columns = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-			
+
 			// get location and create feature
 			//System.out.println(columns[6]);
 			float lat = Float.parseFloat(columns[6]);
@@ -160,6 +160,7 @@ public class ParseFeed {
 			
 			// set ID to OpenFlights unique identifier
 			point.setId(columns[0]);
+			point.putProperty("source", columns[0]);
 			
 			// get other fields from csv
 			point.addProperty("name", columns[1]);
@@ -168,11 +169,11 @@ public class ParseFeed {
 			
 			// pretty sure IATA/FAA is used in routes.dat
 			// get airport IATA/FAA code
-			if(!columns[4].equals("")) {
+			if(!columns[4].equals("\"\"")) {
 				point.putProperty("code", columns[4]);
 			}
 			// get airport ICAO code if no IATA
-			else if(!columns[5].equals("")) {
+			else if(!columns[5].equals("\"\"")) {
 				point.putProperty("code", columns[5]);
 			}
 			
@@ -213,6 +214,7 @@ public class ParseFeed {
 			if(!columns[3].equals("\\N") && !columns[5].equals("\\N")){
 				// set "source" property to be OpenFlights identifier for source airport
 				route.putProperty("source", columns[3]);
+				route.putProperty("source city", columns[2]);
 				// "destination property" -- OpenFlights identifier
 				route.putProperty("destination", columns[5]);
 				
